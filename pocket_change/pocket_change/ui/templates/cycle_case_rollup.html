@@ -1,0 +1,66 @@
+<html>
+<head>
+	<title>Pocket Change - Cycle Case Rollup</title>
+	<link rel=stylesheet media=screen href='{{ url_for('core_ui.static', filename='cycle_case_rollup.css') }}'>
+</head>
+<body>
+	<div class=cycle_case_rollup>
+		<div class=cycle>
+			<div class=cycle_id>{{ cycle.id }}</div>
+			<div class=name>{{ cycle.name }}</div>
+			<div class=description>{{ cycle.description }}</div>
+			{%- if use_jira and cycle_issue %}
+				<div class=jira_issue>
+					<a href='{{ jira_host }}/browse/{{ cycle_issue.key }}'>{{ cycle_issue.key }}</a>
+					<div class=result_status_{{ cycle_issue.fields.status.name.replace(' ', '').lower() }}>{{ cycle_issue.fields.status.name }}</div>
+			{%- endif %}
+		</div>
+		<ul class=case_rollup>
+			{%- for case in cases %}
+				<li class=case>
+					<div class=header>
+						<div class=case_id>{{ case.id }}</div>
+						<div class=label>{{ case.label }}</div>
+						{%- if use_jira %}
+							<div class=jira_summary>
+								<div class=result_status_{{ case_issues[case.id]['rollup_result'].split(' ')[0].lower() }}>
+									{{ case_issues[case.id]['rollup_result'] }}
+								</div>
+							</div>
+							<div class=jira_issues>
+								{%- for issue in case_issues[case.id]['issues'] %}
+									<a href='{{ jira_host }}/browse/{{ issue.key }}'>{{ issue.key }}</a>
+								{%- endfor %}
+							</div>
+						{%- endif %}
+					</div>
+					<ul class=executions>
+						{%- for execution in executions_by_case[case.id] %}
+							<li class=execution>
+									<div class=start_time>{{ execution.start_time }}</div>
+									<div class=end_time>{{ execution.end_time }}</div>
+									{%- for class_name, data in (('execution_id', execution.id), ('description', execution.description)) %}
+										<div class={{ class_name }}>
+											<a href='{{ url_for('core_ui.case_execution_details', case_execution_id=execution.id) }}'>{{ data }}</a>
+										</div>
+									{%- endfor %}
+									<div class=result>
+										<div class=result_status_{{ execution.result.lower() }}>
+											{{ execution.result }}
+										</div>
+									</div>
+									{%- if execution.result != 'PASS' and execution.log_messages %}
+										<div class=last_log_message>{%- if execution.log_messages[-1].source == 'test.capture' -%}
+												{{ execution.log_messages[-2].message }}{%- else -%}
+												{{ execution.log_messages[-1].message }}{%- endif -%}
+										</div>
+									{%- endif %}
+							</li>
+						{%- endfor %}
+					</ul>
+				</li>
+			{%- endfor %}
+		</ul>
+	</div>
+</body>
+</html>

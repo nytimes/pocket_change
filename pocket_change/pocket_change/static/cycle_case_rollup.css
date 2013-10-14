@@ -1,0 +1,235 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align: baseline;
+}
+ul, ol, li
+{
+	list-style-type:none;
+}
+.cycle_case_rollup
+{
+	position:relative;
+	top:10;
+	left:10;
+	width:1000px;
+}
+div.cycle
+{
+	top:0;
+	left:0;
+	width:1000px;
+	height:85px;
+	background-color:#D8D8D8;
+	list-style-type:none;
+}
+div.cycle div.cycle_id
+{
+	position:absolute;
+	top:0;
+	left:10;
+	width:80px;
+	height:35px;
+	font:30px verdana;
+}
+div.cycle div.name
+{
+	position:absolute;
+	top:0;
+	left:100;
+	width:890px;
+	height:35px;
+	font:30px verdana;
+	font-weight:bold;
+}
+div.cycle div.description
+{
+	position:absolute;
+	top:35;
+	left:50;
+	width:940px;
+	height:25px;
+	font:20px verdana;
+}
+div.cycle div.jira_issue
+{
+	position:absolute;
+	top:60;
+	left:50;
+	width:940px;
+	height:20px;
+}
+div.cycle div.jira_issue a
+{
+	position:inherit;
+	width:790px;
+	height:20px;
+}
+div.cycle div.jira_issue div
+{
+	position:inherit;
+	left:800;
+	width:140px;
+	height:20px;
+	font-weight:bold;
+}
+ul.case_rollup
+{
+	position:absolute;
+	top:100;
+	left:0;
+	width:1000px;
+	list-style-type:none;
+}
+ul.case_rollup li.case
+{
+	position:relative;
+	left:20;
+	width:980px;
+	background-color:#D8D8D8;
+}
+li.case div.header
+{
+	position:relative;
+	top:10;
+	left:10;
+	width:950px;
+	height:80px;
+	list-style-type:none;
+}
+li.case div.header div.case_id
+{
+	position:absolute;
+	top:0;
+	left:0;
+	width:70px;
+	height:30px;
+	font:25px verdana;
+}
+li.case div.header div.label
+{
+	position:absolute;
+	top:0;
+	left:80;
+	width:730px;
+	height:30px;
+	font:25px verdana;
+	font-weight:bold;
+}
+li.case div.header div.jira_summary
+{
+	position:absolute;
+	top:0;
+	left:820;
+	width:130px;
+	height:40px;
+	font:15px verdana;
+	font-weight:bold;
+}
+li.case div.header div.jira_issues
+{
+	position:absolute;
+	top:40;
+	left:820;
+	width:130px;
+	height:40px;
+	font:15px verdana;
+}
+li.case ul.executions
+{
+	position:relative;
+	top:0;
+	left:10;
+	width:950px;
+}
+ul.executions li
+{
+	position:relative;
+	top:10;
+	left:20;
+	height:75px;
+	width:930px;
+	background-color:white;
+}
+li.execution div.start_time
+{
+	position:relative;
+	top:0;
+	left:0;
+	height:30px;
+	width:90px;
+	font:12px verdana;
+}
+li.execution div.end_time
+{
+	position:relative;
+	top:5;
+	left:0;
+	height:30px;
+	width:90px;
+	font:12px verdana;
+}
+li.execution div.execution_id
+{
+	position:absolute;
+	top:0;
+	left:110;
+	height:25px;
+	width:60px;
+	font:20px verdana;
+}
+li.execution div.description
+{
+	position:absolute;
+	top:0;
+	left:180;
+	height:75px;
+	width:610px;
+	font:20px verdana;
+	font-weight:bold;
+}
+li.execution div.result
+{
+	position:absolute;
+	top:0;
+	left:800;
+	height:20px;
+	width:130px;
+	font:15px verdana;
+	font-weight:bold;
+}
+li.execution div.last_log_message
+{
+	position:absolute;
+	top:25;
+	left:800;
+	height:50px;
+	width:130px;
+	font:12px verdana;
+}
+.result_status_pass
+{
+	color:green;
+}
+.result_status_fail
+{
+	color:red;
+}
+.result_status_skip
+{
+	color:orange;
+}

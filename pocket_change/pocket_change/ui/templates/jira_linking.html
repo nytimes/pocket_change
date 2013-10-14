@@ -1,0 +1,12 @@
+<html>
+<head>
+	<title>Pocket Change - Jira Linking</title>
+</head>
+<body>
+	<form name="jira_auth" method="post">
+		<input type="text" name="username" value="{{ user.name if user.name else '' }}">
+		<input type="text" name="password" value="{{ user.password if user.password else '' }}">
+		<input type="submit" value="Link to Jira">
+	</form>
+</body>
+</html>

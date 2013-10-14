@@ -1,0 +1,42 @@
+<html>
+<head>
+	<title>Pocket Change - Cycle Listing</title>
+	<link rel=stylesheet media=screen href='{{ url_for('core_ui.static', filename='cycle_listing.css') }}'>
+</head>
+<body>
+	<div class=cycle_listing>
+		<div class=filter_box>
+			{%- if filter %}
+				<div class=current_filter_label>Current Filter:</div>
+				<div class=current_filter>{{ filter }}</div>
+			{%- endif %}
+			<form name="filter" method="post">
+				<input type="text" name="filter">
+				<input type="submit" value="Get Matching Cycles">
+			</form>
+		</div>
+		<ul class=listing>
+			{%- for cycle in cycle_list %}
+				<li>
+					{%- for class_name, data in (('cycle_id', cycle.id), ('name', cycle.name), ('description', cycle.description)) %}
+						<a class={{ class_name }} href='{{ url_for('core_ui.cycle_cases', test_cycle_id=cycle.id) }}'>{{ data }}</a>
+					{%- endfor %}
+					{%- if use_jira and jira_host and cycle.id in cycle_issues %}
+						<a class=jira_issue href='{{ jira_host }}/browse/{{ cycle_issues[cycle.id].key }}'>{{ cycle_issues[cycle.id].key }}</a>
+						<div class=jira_status>{{ cycle_issues[cycle.id].fields.status.name }}</div>
+					{%- endif %}
+				</li>
+			{%- endfor %}
+		</ul>
+		<div class=listing_nav>
+			{% if offset!=1 %}
+				<a class=prev_link href='{{ url_for('core_ui.cycle_listing', filter=filter if filter else None, offset=offset-1) }}'>Prev</a>
+			{% endif %}
+			<div class=offset>{{ offset }}</div>
+			{% if has_next %}
+				<a class=next_link href='{{ url_for('core_ui.cycle_listing', filter=filter if filter else None, offset=offset+1) }}'>Next</a>
+			{% endif %}
+		</div>
+	</div>
+</body>
+</html>

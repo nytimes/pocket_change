@@ -1,0 +1,44 @@
+<html>
+<head>
+	<title>Pocket Change - Case Execution Details</title>
+	<link rel=stylesheet media=screen href='{{ url_for('core_ui.static', filename='case_execution_details.css') }}'>
+</head>
+<body>
+	<div class=execution_details>
+		<div class=header>
+			{%- for class_name, data in (('case_id', case_execution.case_id), ('case_label', case_execution.case.label), ('execution_id', case_execution.id), ('execution_description', case_execution.description)) %}
+				<div class={{ class_name }}>{{ data }}</div>
+			{%- endfor %}
+			<div class=result>
+				<div class=result_status_{{ case_execution.result.lower().replace(' ', '') }}>{{ case_execution.result.upper() }}</div>
+			</div>
+			<div class=metadata>
+				{%- for class_name, data in (('environment', case_execution.execution_batch.environment), ('host', case_execution.execution_batch.host), ('start_time', case_execution.start_time), ('end_time', case_execution.end_time))%}
+					<div class={{ class_name }}>
+						<div class=label>{{ class_name.replace('_', ' ') }}</div>
+						<div class=value>{{ data }}</div>
+					</div>
+				{%- endfor %}
+			</div>
+		</div>
+		<ul class=logs>
+			{%- for log in case_execution.log_messages %}
+				<li class=log>
+					<div class=time>{{ log.time_logged }}</div>
+					<div class=level>{{ log.level }}</div>
+					<div class=message>{{ log.message }}</div>
+					<div class=source>{{ log.source }}</div>
+				</li>
+			{%- endfor %}
+		</ul>
+		<ul class=cycle_links>
+			{%- for test_cycle in case_execution.test_cycles %}
+				<li>{%- for class_name, data in (('name', test_cycle.name), ('description', test_cycle.description)) %}
+						<a class={{ class_name }} href='{{ url_for('core_ui.cycle_cases', test_cycle_id=test_cycle.id) }}'>{{ data }}</a>
+					{%- endfor %}
+				</li>
+			{%- endfor %}
+		</ul>
+	</div>
+</body>
+</html>

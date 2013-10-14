@@ -1,0 +1,243 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align: baseline;
+}
+ul, ol, li
+{
+	list-style-type:none;
+}
+.execution_details
+{
+	position:relative;
+	top:10;
+	left:10;
+	width:1000px;
+	height:115px;
+}
+div.header
+{
+	position:absolute;
+	top:0;
+	left:0;
+	width:1000px;
+	height:180px;
+	background-color:#D8D8D8;
+}
+div.case_id
+{
+	position:absolute;
+	top:10;
+	left:10;
+	width:80px;
+	height:30px;
+	font:25px verdana;
+}
+div.case_label
+{
+	position:absolute;
+	top:10;
+	left:100;
+	width:790px;
+	height:30px;
+	font:25px verdana;
+	font-weight:bold;
+}
+div.execution_id
+{
+	position:absolute;
+	top:50;
+	left:10;
+	width:80px;
+	height:25px;
+	font:20px verdana;
+}
+div.execution_description
+{
+	position:absolute;
+	top:50;
+	left:100;
+	width:790px;
+	height:25px;
+	font:20px verdana;
+	font-weight:bold;
+}
+div.header div.result
+{
+	position:absolute;
+	top:20;
+	left:900;
+	width:90px;
+	height:25px;
+	font:20px verdana;
+	font-weight:bold;
+}
+div.metadata
+{
+	position:relative;
+	top:85;
+	left:20;
+	width:960px;
+	height:85px;
+	font:15px verdana;
+	background-color:white;
+}
+div.metadata div.value
+{
+	font-weight:bold;
+}
+
+div.metadata div.environment, div.metadata div.host, div.metadata div.start_time, div.metadata div.end_time
+{
+	position:absolute;
+	height:40px;
+}
+div.metadata div.environment, div.metadata div.host
+{
+	left:0;
+	width:740px;
+}
+div.metadata div.environment, div.metadata div.start_time
+{
+	top:0;
+}
+div.metadata div.host, div.metadata div.end_time
+{
+	top:45;
+}
+div.metadata div.environment div.label, div.metadata div.host div.label
+{
+	position:absolute;
+	top:0;
+	left:0;
+	width:80px;
+}
+div.metadata div.environment div.value, div.metadata div.host div.value
+{
+	position:absolute;
+	top:0;
+	left:85;
+	width:655px;
+}
+div.metadata div.start_time, div.metadata div.end_time
+{
+	left:750;
+	width:220px;
+}
+div.metadata div.start_time div.label, div.metadata div.end_time div.label
+{
+	position:absolute;
+	top:0;
+	left:0;
+	width:200px;
+}
+div.metadata div.start_time div.value, div.metadata div.end_time div.value
+{
+	position:absolute;
+	top:20;
+	left:20;
+	width:200px;
+}
+ul.case_logs
+{
+	position:absolute;
+	top:190;
+	left:20;
+	width:980;
+	background-color:#D8D8D8;
+}
+li.log
+{
+	position:relative;
+	top:210;
+	left:10;
+	top-padding:10px;
+	width:960px;
+	height:65px;
+}
+li.log div.time, li.log div.level, li.log div.source
+{
+	position:absolute;
+	top:0;
+	height:20px;
+	font:15px verdana;
+	font-weight:bold;
+}
+li.log div.time
+{
+	left:0;
+	width:220px;
+}
+li.log div.level
+{
+	left:230;
+	width:110px;
+}
+li.log div.source
+{
+	left:350;
+	width:110px;
+}
+li.log div.message
+{
+	position:absolute;
+	top:25;
+	left:10;
+	width:950px;
+	font:20px verdana;
+}
+ul.cycle_links
+{
+	position:relative;
+	top:210;
+	left:10;
+}
+ul.cycle_links li
+{
+	position:absolute;
+	left:20;
+	font:15px verdana;
+}
+ul.cycle_links li a
+{
+	position:absolute;
+	top:0;
+	height:20px;
+}
+ul.cycle_links li a.name
+{
+	left:0;
+	width:300px;
+	font-weight:bold;
+}
+ul.cycle_links li a.description
+{
+	left:310;
+	width:600px;
+}
+.result_status_pass
+{
+	color:green;
+}
+.result_status_fail
+{
+	color:red;
+}
+.result_status_skip
+{
+	color:orange;
+}
