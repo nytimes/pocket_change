@@ -20,13 +20,12 @@ class CaseResource(DBEntityResource):
     
     def get(self, case_id=None):
         
-        process_search_data = self.process_search_data
-        process_search_data(id=case_id)
+        process_search_result = self.process_search_data(id=case_id)
         try:
-            return process_search_data['kwargs']['search_result']
+            return process_search_result['kwargs']['search_result']
         except KeyError:
-            return [case_to_dict(case, expand=process_search_data['expand'])
-                    for case in process_search_data['query'].all()]
+            return [case_to_dict(case, expand=process_search_result['expand'])
+                    for case in process_search_result['query'].all()]
 
 
 @CaseResource.plugin('process_search_data')

@@ -30,10 +30,9 @@ class CaseExecutionResource(JiraRelatedResource):
     
     def get(self, case_execution_id=None):
         
-        process_search_data = self.process_search_data
-        process_search_data(id=case_execution_id)
+        process_search_result = self.process_search_data(id=case_execution_id)
         try:
-            return process_search_data['kwargs']['search_result']
+            return process_search_result['kwargs']['search_result']
         except KeyError:
-            return [case_execution_to_dict(case_execution, expand=process_search_data['expand'])
-                    for case_execution in process_search_data['query'].all()]
+            return [case_execution_to_dict(case_execution, expand=process_search_result['expand'])
+                    for case_execution in process_search_result['query'].all()]

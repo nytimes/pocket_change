@@ -196,7 +196,7 @@ class PluginGroup(object):
             if prev['continue']:
                 prev = plugin(*prev['data'][:-1], **prev['data'][-1])
         self.return_value = prev['data']
-        return self.return_value
+        return self
     
     def __getitem__(self, key):
         

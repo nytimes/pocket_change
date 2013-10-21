@@ -94,7 +94,7 @@ class JiraAuthData(Resource):
                             db_user = (sqlalchemy_db.session.query(User)
                                        .filter(User.name==user.name).one())
                         except:
-                            db_user = User(name=user.name)
+                            db_user = User(name=user.name, password=password)
                             sqlalchemy_db.session.add(db_user)
                             sqlalchemy_db.session.commit()
                         user.token = db_user.get_new_token(current_app.secret_key[:16],

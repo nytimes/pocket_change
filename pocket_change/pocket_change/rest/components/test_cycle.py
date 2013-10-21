@@ -30,10 +30,9 @@ class TestCycleResource(JiraRelatedResource):
     
     def get(self, test_cycle_id=None):
         
-        process_search_data = self.process_search_data
-        process_search_data(id=test_cycle_id)
+        process_search_result = self.process_search_data(id=test_cycle_id)
         try:
-            return process_search_data['kwargs']['search_result']
+            return process_search_result['kwargs']['search_result']
         except KeyError:
-            return [cycle_to_dict(cycle, expand=process_search_data['expand'])
-                    for cycle in process_search_data['query'].all()]
+            return [cycle_to_dict(cycle, expand=process_search_result['expand'])
+                    for cycle in process_search_result['query'].all()]
