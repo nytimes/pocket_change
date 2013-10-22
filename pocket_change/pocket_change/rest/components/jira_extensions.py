@@ -40,7 +40,7 @@ def filter_by_jira_issue(resource, expand=None, query=None, **kwargs):
         issue_id = None
     else:
         query = (query.join(resource.__class__.jira_issue_db_model)
-                 .filter(resource.__class__jira_issue_db_model.issue_id==issue_id))
+                 .filter(resource.__class__.jira_issue_db_model.issue_id==issue_id))
     try:
         issue_key = request.args['issue_key']
     except KeyError:
