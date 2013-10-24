@@ -2,6 +2,7 @@
 <head>
 	<title>Pocket Change - Cycle Case Rollup</title>
 	<link rel=stylesheet media=screen href='{{ url_for('core_ui.static', filename='cycle_case_rollup.css') }}'>
+	<script type='text/javascript' src='{{ url_for('core_ui.static', filename='cycle_case_rollup.js') }}'></script>
 </head>
 <body>
 	<div class=cycle_case_rollup>
@@ -62,5 +63,6 @@
 			{%- endfor %}
 		</ul>
 	</div>
+	<script type='text/javascript'>initFilters()</script>
 </body>
 </html>

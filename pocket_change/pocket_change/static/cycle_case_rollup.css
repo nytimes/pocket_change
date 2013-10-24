@@ -233,3 +233,15 @@ li.execution div.last_log_message
 {
 	color:orange;
 }
+.filter_list li
+{
+	background-color:green;
+}
+.filter_list li[active=n]
+{
+	background-color:red;
+}
+.case_rollup li.case[filtered=y]
+{
+	visibility:hidden;
+}
