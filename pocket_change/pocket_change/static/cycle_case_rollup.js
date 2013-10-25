@@ -85,14 +85,29 @@ function initFilterGroup(filterName, statusLocator, label, getCaseFromStatus) {
 		statusKeys.sort();
 		var statusFiltersContainer = document.createElement('div');
 		statusFiltersContainer.className = filterName;
-		statusFiltersContainer.appendChild(document.createTextNode(label));
+		var labelContainer = document.createElement('div');
+		labelContainer.className = 'label';
+		labelContainer.appendChild(document.createTextNode(label));
+		statusFiltersContainer.appendChild(labelContainer);
 		var statusFilters = document.createElement('ul');
 		statusFilters.className = 'filter_list';
 		statusFiltersContainer.appendChild(statusFilters);
 		for (var i = 0; i < statusKeys.length; i++) {
+			filterNode = statusFilterNodes[statusKeys[i]];
+			filterNode.setAttribute('column', i % 4);
+			filterNode.setAttribute('row', Math.floor(i / 4));
 			statusFilters.appendChild(statusFilterNodes[statusKeys[i]]);
 		};
-		document.body.appendChild(statusFiltersContainer);
+		caseFiltersNode = document.querySelector('div.case_filters');
+		if (caseFiltersNode.childNodes.length == 0) {
+			spacer = document.createElement('div');
+			spacer.className = 'spacer';
+			caseFiltersNode.appendChild(spacer);
+		}
+		document.querySelector('div.case_filters').appendChild(statusFiltersContainer);
+		spacer = document.createElement('div');
+		spacer.className = 'spacer';
+		caseFiltersNode.appendChild(spacer);
 	};
 };
 function initFilters() {

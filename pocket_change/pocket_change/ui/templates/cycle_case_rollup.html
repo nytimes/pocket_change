@@ -16,6 +16,8 @@
 					<div class=result_status_{{ cycle_issue.fields.status.name.replace(' ', '').lower() }}>{{ cycle_issue.fields.status.name }}</div>
 			{%- endif %}
 		</div>
+		<div class='case_rollup_container'>
+		<div class='case_filters'></div>
 		<ul class=case_rollup>
 			{%- for case in cases %}
 				<li class=case>
@@ -62,6 +64,7 @@
 				</li>
 			{%- endfor %}
 		</ul>
+		</div>
 	</div>
 	<script type='text/javascript'>initFilters()</script>
 </body>
