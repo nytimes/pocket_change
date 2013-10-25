@@ -40,16 +40,18 @@ function FilterListenerStore() {
 	};
 };
 var filterListeners = new FilterListenerStore();
-function initFilters() {
-	var jiraCaseStatusNodes = document.querySelectorAll('li.case div.jira_summary div');
-	if (jiraCaseStatusNodes.length > 0) {
-		var jiraStatusFilterNodes = {};
-		var jiraStatusKeys = [];
-		for (var i = 0; i < jiraCaseStatusNodes.length; i ++) {
-			var key = jiraCaseStatusNodes[i].textContent.trim();
-			var caseNode = jiraCaseStatusNodes[i].parentNode.parentNode.parentNode;
+function initFilterGroup(filterName, statusLocator, label, getCaseFromStatus) {
+	var statusNodes = document.querySelectorAll(statusLocator);
+	if (statusNodes.length > 0) {
+		var statusFilterNodes = {};
+		var statusKeys = [];
+		// Lists of case nodes for which listeners are attached by status key
+		var statusKeyCaseNodeMap = {};
+		for (var i = 0; i < statusNodes.length; i++) {
+			var key = statusNodes[i].textContent.trim();
+			var caseNode = getCaseFromStatus(statusNodes[i]);
 			var filterNode;
-			if (key in jiraStatusFilterNodes) { filterNode = jiraStatusFilterNodes[key]; }
+			if (key in statusFilterNodes) { filterNode = statusFilterNodes[key]; }
 			else {
 				filterNode = document.createElement('li');
 				filterNode.setAttribute('active', 'y');
@@ -60,77 +62,50 @@ function initFilters() {
 							},
 							false);
 				filterNode.appendChild(document.createTextNode(key));
-				jiraStatusKeys.push(key);
-				jiraStatusFilterNodes[key] = filterNode; 
-				filterNode.className = jiraCaseStatusNodes[i].className + '_jira_status_filter';
+				statusKeys.push(key);
+				statusFilterNodes[key] = filterNode; 
+				filterNode.className = statusNodes[i].className + '_' + filterName;
 			};
-			filterNode.addEventListener('click',
-									filterListeners.getListener(caseNode,
-															'jira_status_filter'),
-									false);
-		};
-		jiraStatusKeys.sort();
-		var jiraStatusFiltersContainer = document.createElement('div');
-		jiraStatusFiltersContainer.className = 'jira_status_filters';
-		jiraStatusFiltersContainer.appendChild(document.createTextNode('Show:'));
-		var jiraStatusFilters = document.createElement('ul');
-		jiraStatusFilters.className = 'filter_list';
-		jiraStatusFiltersContainer.appendChild(jiraStatusFilters);
-		for (var i = 0; i < jiraStatusKeys.length; i++) {
-			jiraStatusFilters.appendChild(jiraStatusFilterNodes[jiraStatusKeys[i]]);
-		};
-		document.body.appendChild(jiraStatusFiltersContainer);
-	};
-	var executionResultNodes = document.querySelectorAll('li.execution div.result div');
-	var executionResultFilterNodes = {};
-	var executionResultKeys = [];
-	// Lists of case nodes for which listeners are attached by execution result key
-	var executionResultKeyCaseNodeMap = {};
-	for (var i = 0; i < executionResultNodes.length; i ++) {
-		var key = executionResultNodes[i].textContent.trim();
-		var caseNode = executionResultNodes[i].parentNode.parentNode.parentNode.parentNode;
-		var filterNode;
-		if (key in executionResultFilterNodes) { filterNode = executionResultFilterNodes[key]; }
-		else {
-			filterNode = document.createElement('li');
-			filterNode.setAttribute('active', 'y');
-			filterNode.addEventListener('click',
-						function() {
-							set = (this.getAttribute('active') == 'n' ? 'y' : 'n');
-							this.setAttribute('active', set);
-						},
-						false);
-			filterNode.appendChild(document.createTextNode(key));
-			executionResultKeys.push(key);
-			executionResultFilterNodes[key] = filterNode; 
-			filterNode.className = executionResultNodes[i].className + '_execution_filter';
-		};
-		var alreadyListening = false;
-		if (key in executionResultKeyCaseNodeMap) {
-			for (var j = 0; j < executionResultKeyCaseNodeMap[key].length; j++) {
-				if (executionResultKeyCaseNodeMap[key][j] == caseNode) {
-					alreadyListening = true;
+			var alreadyListening = false;
+			if (key in statusKeyCaseNodeMap) {
+				for (var j = 0; j < statusKeyCaseNodeMap[key].length; j++) {
+					if (statusKeyCaseNodeMap[key][j] == caseNode) {
+						alreadyListening = true;
+					};
 				};
+			} else { statusKeyCaseNodeMap[key] = []; };
+			if (!alreadyListening) {
+				filterNode.addEventListener('click',
+										filterListeners.getListener(caseNode,
+																filterName),
+										false);
+				statusKeyCaseNodeMap[key].push(caseNode);
 			};
-		} else { executionResultKeyCaseNodeMap[key] = []; };
-		if (!alreadyListening) {
-			filterNode.addEventListener('click',
-						filterListeners.getListener(caseNode,
-									'execution_status_filter'),
-						false);
-			executionResultKeyCaseNodeMap[key].push(caseNode);
 		};
-			
+		statusKeys.sort();
+		var statusFiltersContainer = document.createElement('div');
+		statusFiltersContainer.className = filterName;
+		statusFiltersContainer.appendChild(document.createTextNode(label));
+		var statusFilters = document.createElement('ul');
+		statusFilters.className = 'filter_list';
+		statusFiltersContainer.appendChild(statusFilters);
+		for (var i = 0; i < statusKeys.length; i++) {
+			statusFilters.appendChild(statusFilterNodes[statusKeys[i]]);
+		};
+		document.body.appendChild(statusFiltersContainer);
 	};
-	executionResultKeys.sort();
-	var executionFiltersContainer = document.createElement('div');
-	executionFiltersContainer.className = 'execution_filters';
-	executionFiltersContainer.appendChild(document.createTextNode('Show with:'));
-	var executionFilters = document.createElement('ul');
-	executionFilters.className = 'filter_list';
-	executionFiltersContainer.appendChild(executionFilters);
-	for (var i = 0; i < executionResultKeys.length; i++) {
-		executionFilters.appendChild(executionResultFilterNodes[executionResultKeys[i]]);
-	};
-	document.body.appendChild(executionFiltersContainer);
+};
+function initFilters() {
+	initFilterGroup('jira_status_filter',
+					'li.case div.jira_summary div',
+					'Show:',
+					function(statusNode) {
+						return statusNode.parentNode.parentNode.parentNode;
+					});
+	initFilterGroup('execution_result_filter',
+					'li.execution div.result div',
+					'Show with:',
+					function(statusNode) {
+						return statusNode.parentNode.parentNode.parentNode.parentNode;
+					});
 };
