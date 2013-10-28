@@ -17,11 +17,20 @@ def cycle_cases(test_cycle_id):
     case_issues = defaultdict(lambda: {'issue_ids' : set(),
                                        'issues' : list()})
     cycle_issue = None
+    #TODO: The hasattr jira_issue and jira_issue trueish tests are are flakey hack
+    # to fix displaying PASS status for executions not linked in Jira.  Need to fix
+    # this in a better way.  Right now, a case with an execution reported in to a
+    # cycle will show a Jira status whether or not that case had any executions run
+    # while linked to Jira as long as the cycle itself is linked to Jira.  Conversely,
+    # an execution with a Jira issue being displayed as part of a cycle without an
+    # issue will not show its issue.  This may not actually be a problem though.
     use_jira = bool(current_app.config['KAICHU_ENABLED']
                     and current_user and current_user.is_authenticated()
                     and hasattr(current_user, 'user') and current_user.user
                     and hasattr(current_user.user, 'jira') and current_user.user.jira
-                    and current_user.user.jira.active)
+                    and current_user.user.jira.active
+                    and hasattr(test_cycle, 'jira_issue')
+                    and test_cycle.jira_issue)
     for case_execution in (sqlalchemy_db.session.query(CaseExecution)
                            .filter(CaseExecution.test_cycles.contains(test_cycle))
                            .order_by(CaseExecution.id)):
