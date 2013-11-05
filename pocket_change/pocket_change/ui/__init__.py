@@ -15,6 +15,7 @@ def load(app):
     import pocket_change.ui.views.cycle_case_rollup
     import pocket_change.ui.views.case_execution_details
     import pocket_change.ui.views.login
+    import pocket_change.ui.views.get_token
     if app.config['KAICHU_ENABLED']:
         import pocket_change.ui.jira_extensions
         import pocket_change.ui.views.jira_linking

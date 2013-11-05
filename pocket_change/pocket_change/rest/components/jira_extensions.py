@@ -77,6 +77,7 @@ class JiraAuthData(Resource):
         if app_key and app_key == current_app.config['JIRA_APP_KEY']:
             if username:
                 if token:
+                    print token, username
                     user = get_user_from_token(token, username)
                     used = False
                     if user:
@@ -85,6 +86,7 @@ class JiraAuthData(Resource):
                             sqlalchemy_db.session.merge(user.token)
                             sqlalchemy_db.session.commit()
                     elif not password and not used:
+                        print 'inv'
                         return {'message' : 'Invalid token.'}, 400
                 if password:
                     user = PocketChangeUser(None, username, password)
