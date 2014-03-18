@@ -1,234 +1,159 @@
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
+* {
+	box-sizing: border-box;
+}
+
+html, body, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
 b, u, i, center,
 dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
+fieldset, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, 
 figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video
 {
-	margin: 0;
-	padding: 0;
+	margin: 0px auto;
 	border: 0;
-	vertical-align: baseline;
+	background-color:#ededed;
+	font-family: "Helvetica", "Arial", sans-serif;
+	font-size: 18px;
+	font-weight: 200;
 }
+
+div {
+	margin: 0px auto;
+	padding: 15px;
+}
+
 ul, ol, li
 {
 	list-style-type:none;
+	-webkit-padding-start: 0px;
 }
+
 .execution_details
 {
 	position:relative;
-	top:10;
-	left:10;
-	width:1000px;
-	height:115px;
+	width: 75%;
 }
+
+
 div.header
 {
-	position:absolute;
-	top:0;
-	left:0;
-	width:1000px;
-	height:180px;
-	background-color:#D8D8D8;
+	background-color:#444;
+	color: #fff;
+	list-style-type:none;
 }
-div.case_id
-{
-	position:absolute;
-	top:10;
-	left:10;
-	width:80px;
-	height:30px;
-	font:25px verdana;
+
+.case_id {
+	display: inline;
 }
+
 div.case_label
 {
-	position:absolute;
-	top:10;
-	left:100;
-	width:790px;
-	height:30px;
-	font:25px verdana;
-	font-weight:bold;
+	display: inline;
+	font-weight: bold;
 }
 div.execution_id
 {
-	position:absolute;
-	top:50;
-	left:10;
-	width:80px;
-	height:25px;
-	font:20px verdana;
+	display: inline;
 }
 div.execution_description
 {
-	position:absolute;
-	top:50;
-	left:100;
-	width:790px;
-	height:25px;
-	font:20px verdana;
-	font-weight:bold;
+	display: inline;
+
 }
-div.header div.result
+
+
+.result
 {
-	position:absolute;
-	top:20;
-	left:900;
-	width:90px;
-	height:25px;
-	font:20px verdana;
-	font-weight:bold;
+	text-align: right;
+	padding: 0px;
+	top: -35px;
+	position: relative;
+	font-weight: bold;
 }
+
 div.metadata
 {
 	position:relative;
-	top:85;
-	left:20;
-	width:960px;
-	height:85px;
-	font:15px verdana;
-	background-color:white;
+	width: 100%;
+	display: block;
+	color: #000;
+	background-color: #fff;
+	padding: 0px;
 }
-div.metadata div.value
-{
-	font-weight:bold;
-}
+
 
 div.metadata div.environment, div.metadata div.host, div.metadata div.start_time, div.metadata div.end_time
 {
-	position:absolute;
-	height:40px;
+	display: inline-block;
+	overflow: none;
 }
-div.metadata div.environment, div.metadata div.host
+
+.metadata .environment {
+	float: left;
+}
+
+.metadata .label {
+	font-weight: bold;
+	display: block;
+	margin: 0px;
+	padding: 0px;
+}
+
+.metadata .value {
+	font-weight: 200;
+	display: inline;
+	margin: 0px;
+	padding: 0px;
+}
+
+
+.logs {
+	background-color:#fff;
+}
+
+.log
 {
-	left:0;
-	width:740px;
+	padding: 10px;
+	border-bottom: 1px solid #ededed;
+	overflow: hidden;
+	background-color: #fff;
+	font-size: 14px;
 }
-div.metadata div.environment, div.metadata div.start_time
-{
-	top:0;
+
+.time, .level, .message {
+	display: block;
+	float: left;
 }
-div.metadata div.host, div.metadata div.end_time
-{
-	top:45;
+
+
+.source {
+	display: block;
+	float: right;
 }
-div.metadata div.environment div.label, div.metadata div.host div.label
-{
-	position:absolute;
-	top:0;
-	left:0;
-	width:80px;
+
+.message {
+	width: 400px;
+
 }
-div.metadata div.environment div.value, div.metadata div.host div.value
-{
-	position:absolute;
-	top:0;
-	left:85;
-	width:655px;
+
+ul .cycle_links {
+	background-color: #fff;
 }
-div.metadata div.start_time, div.metadata div.end_time
-{
-	left:750;
-	width:220px;
+
+.cycle_links li {
+	padding: 20px;
+	font-size: 14px;
+	text-align: center;
+	background-color: #fff;
 }
-div.metadata div.start_time div.label, div.metadata div.end_time div.label
-{
-	position:absolute;
-	top:0;
-	left:0;
-	width:200px;
-}
-div.metadata div.start_time div.value, div.metadata div.end_time div.value
-{
-	position:absolute;
-	top:20;
-	left:20;
-	width:200px;
-}
-ul.case_logs
-{
-	position:absolute;
-	top:190;
-	left:20;
-	width:980;
-	background-color:#D8D8D8;
-}
-li.log
-{
-	position:relative;
-	top:210;
-	left:10;
-	top-padding:10px;
-	width:960px;
-	height:65px;
-}
-li.log div.time, li.log div.level, li.log div.source
-{
-	position:absolute;
-	top:0;
-	height:20px;
-	font:15px verdana;
-	font-weight:bold;
-}
-li.log div.time
-{
-	left:0;
-	width:220px;
-}
-li.log div.level
-{
-	left:230;
-	width:110px;
-}
-li.log div.source
-{
-	left:350;
-	width:110px;
-}
-li.log div.message
-{
-	position:absolute;
-	top:25;
-	left:10;
-	width:950px;
-	font:20px verdana;
-}
-ul.cycle_links
-{
-	position:relative;
-	top:210;
-	left:10;
-}
-ul.cycle_links li
-{
-	position:absolute;
-	left:20;
-	font:15px verdana;
-}
-ul.cycle_links li a
-{
-	position:absolute;
-	top:0;
-	height:20px;
-}
-ul.cycle_links li a.name
-{
-	left:0;
-	width:300px;
-	font-weight:bold;
-}
-ul.cycle_links li a.description
-{
-	left:310;
-	width:600px;
-}
+
+
 .result_status_pass
 {
 	color:green;
