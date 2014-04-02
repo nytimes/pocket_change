@@ -12,7 +12,7 @@ infrastructure.  It allows users to view results of tests.
 Installation and Quickstart
 ===========================
 
-Install Pocket Change with pip: `pip install pocket-change`.  This will get
+Install Pocket Change with pip: ``pip install pocket-change``.  This will get
 you all the dependencies, though you'll probably also want pocket.  For that: 
 `pip install sneeze-pocket`.
 
