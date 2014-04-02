@@ -37,6 +37,10 @@ Now, you should be able to launch the app in your WSGI container of choice
 (or start the dev server by running ``python pocket_change/__init__.py``
 from the command line).
 
+Repo
+====
+https://github.com/NYTimes/pocket_change
+
 Indices and tables
 ==================
 
