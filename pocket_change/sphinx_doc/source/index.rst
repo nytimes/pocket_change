@@ -12,14 +12,12 @@ infrastructure.  It allows users to view results of tests.
 Installation and Quickstart
 ===========================
 
-Pocket Change is dependent on the APIs provided by the Sneeze components, so
-you must first install (ex via pip) Sneeze and Pocket, along with any other
-Sneeze plugins you may be using.  Along with the dependencies, you'll also
-obviously need the Pocket Change code itself, so clone it.
+Install Pocket Change with pip: `pip install pocket-change`.  This will get
+you all the dependencies, though you'll probably also want pocket.  For that: 
+`pip install sneeze-pocket`.
 
-After installing dependencies, you must create a config file.  It should be
-formatted like a Flask config file (KEY = VALUE) and contain the following
-values:
+After installation, you must create a config file.  It should be formatted
+like a Flask config file (KEY = VALUE) and contain the following values:
 
 * ``SQLALCHEMY_DATABASE_URI`` - A `SQLAlchemy formatted
   <http://docs.sqlalchemy.org/en/rel_0_8/core/engines.html#database-urls>`_
