@@ -172,33 +172,26 @@ li.case div.header div.jira_summary
 	display: inline;
 }
 
+.result_status {
+	color: black;
+	float: right;
+	display: inline;
+	position: relative;
+	top: -75px;
+	font-weight: bold;
+}
 
 .result_status_pass
 {
 	color:green;
-	float: right;
-	display: inline;
-	position: relative;
-	top: -75px;
-	font-weight: bold;
 }
 .result_status_fail
 {
 	color:red;
-	float: right;
-	display: inline;
-	position: relative;
-	top: -75px;
-	font-weight: bold;
 }
 .result_status_skip
 {
 	color:orange;
-	float: right;
-	display: inline;
-	position: relative;
-	top: -75px;
-	font-weight: bold;
 }
 
 .last_log_message {

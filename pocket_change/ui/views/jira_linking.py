@@ -27,7 +27,8 @@ def start_linking():
                                           signature_method=SIGNATURE_RSA,
                                           rsa_key=rsa_data)
             token_response = oauth_session.fetch_request_token(jira_host + '/plugins/servlet/oauth/request-token')
-            db_user = sqlalchemy_db.session.merge(current_user.user)
+            db_session = sqlalchemy_db.create_scoped_session()
+            db_user = db_session.merge(current_user.user)
             if hasattr(db_user, 'jira') and db_user.jira and db_user.jira is not None:
                 db_user.jira.name = username
                 db_user.jira.oauth_token = token_response['oauth_token']
@@ -40,7 +41,7 @@ def start_linking():
                                                                     oauth_secret=token_response['oauth_token_secret'],
                                                                     expires=None,
                                                                     revoked=False)
-            sqlalchemy_db.session.commit()
+            db_session.commit()
             auth_url = oauth_session.authorization_url(jira_host + '/plugins/servlet/oauth/authorize')
             return redirect(auth_url + '&redirect_uri=' + current_app.config['APP_HOST'] + ':' + current_app.config['APP_PORT'] + url_for('kaichu_ui.complete_link'))
         else:
@@ -64,11 +65,12 @@ def complete_link():
                                       resource_owner_secret=current_user.user.jira.oauth_secret)
         jira_host = current_app.config['JIRA_HOST'].rstrip('/')
         token_response = oauth_session.fetch_access_token(jira_host + '/plugins/servlet/oauth/access-token')
-        db_user = sqlalchemy_db.session.merge(current_user.user)
+        db_session = sqlalchemy_db.create_scoped_session()
+        db_user = db_session.merge(current_user.user)
         db_user.jira.oauth_token = token_response['oauth_token']
         db_user.jira.oauth_secret = token_response['oauth_token_secret']
         db_user.jira.expires = datetime.now() + timedelta(seconds=int(token_response['oauth_expires_in']))
-        sqlalchemy_db.session.commit()
+        db_session.commit()
         g.jira._session.auth = OAuth1(current_app.config['JIRA_APP_KEY'],
                                       signature_method=SIGNATURE_RSA,
                                       rsa_key=rsa_data,

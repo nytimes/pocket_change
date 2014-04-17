@@ -12,7 +12,7 @@ from sqlalchemy import or_
 def cycle_listing(filter=None, offset=1):
     
     TestCycle = sqlalchemy_db.models['TestCycle']
-    query = sqlalchemy_db.session.query(TestCycle)
+    query = sqlalchemy_db.create_scoped_session().query(TestCycle)
     if request.method == 'POST':
         filter = request.form.get('filter', None)
         offset = 1

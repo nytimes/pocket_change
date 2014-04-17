@@ -7,7 +7,7 @@ from flask import render_template
 def case_execution_details(case_execution_id):
     
     CaseExecution = sqlalchemy_db.models['CaseExecution']
-    execution = (sqlalchemy_db.session.query(CaseExecution)
+    execution = (sqlalchemy_db.create_scoped_session().query(CaseExecution)
                  .filter(CaseExecution.id==case_execution_id)
                  .one())
     return render_template('case_execution_details.html',

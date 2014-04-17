@@ -48,8 +48,10 @@
 										</div>
 									{%- endfor %}
 									<div class=result>
-										<div class=result_status_{{ execution.result.lower() }}>
-											{{ execution.result }}
+										<div class=result_status>
+											<div class=result_status_{{ execution.result.lower() }}>
+												{{ execution.result }}
+											</div>
 										</div>
 									</div>
 									{%- if execution.result != 'PASS' and execution.log_messages %}

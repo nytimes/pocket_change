@@ -17,8 +17,9 @@ def login():
         password = request.form.get('password', '')
         user = PocketChangeUser(None, username, password)
         User = sqlalchemy_db.models['User']
+        db_session = sqlalchemy_db.create_scoped_session()
         try:
-            db_user = (sqlalchemy_db.session.query(User)
+            db_user = (db_session.query(User)
                        .filter(User.name==user.name).one())
         except:
             db_user = None
@@ -32,11 +33,11 @@ def login():
             else:
                 db_user = User(name=user.name)
                 db_user.password = password
-                sqlalchemy_db.session.add(db_user)
-                sqlalchemy_db.session.commit()
+                db_session.add(db_user)
+                db_session.commit()
             user.token = db_user.get_new_token(current_app.secret_key[:16],
                                                expires=datetime.now() + login_lifetime)
-            sqlalchemy_db.session.commit()
+            db_session.commit()
             session['username'] = user.name
             login_user(user)
             return 'logged in'

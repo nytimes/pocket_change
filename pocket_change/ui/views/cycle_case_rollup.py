@@ -10,7 +10,8 @@ def cycle_cases(test_cycle_id):
     
     CaseExecution = sqlalchemy_db.models['CaseExecution']
     TestCycle = sqlalchemy_db.models['TestCycle']
-    test_cycle = sqlalchemy_db.session.query(TestCycle).filter(TestCycle.id==test_cycle_id).one()
+    db_session = sqlalchemy_db.create_scoped_session()
+    test_cycle = db_session.query(TestCycle).filter(TestCycle.id==test_cycle_id).one()
     executions_by_case = defaultdict(list)
     cases = []
     case_ids = set()
@@ -31,7 +32,7 @@ def cycle_cases(test_cycle_id):
                     and current_user.user.jira.active
                     and hasattr(test_cycle, 'jira_issue')
                     and test_cycle.jira_issue)
-    for case_execution in (sqlalchemy_db.session.query(CaseExecution)
+    for case_execution in (db_session.query(CaseExecution)
                            .filter(CaseExecution.test_cycles.contains(test_cycle))
                            .order_by(CaseExecution.id)):
         if 'Out of case scope :' not in case_execution.case.label:
