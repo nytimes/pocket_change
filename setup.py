@@ -17,4 +17,5 @@ setup(name='pocket-change',
                         'Flask',
                         'Flask-RESTful',
                         'Flask-SQLAlchemy',
-                        'passlib'])
+                        'passlib',
+                        'flask-login'])
