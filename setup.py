@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='pocket-change',
-      version='0.0.4',
+      version='0.0.5',
       author='Silas Ray',
       author_email='silas.ray@nytimes.com',
       license='Apache2.0',
