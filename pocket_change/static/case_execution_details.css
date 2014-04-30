@@ -54,8 +54,10 @@ div.header
 
 div.case_label
 {
-	display: inline;
+	display: inline-block;
 	font-weight: bold;
+	width: 850;
+	word-wrap: break-word;
 }
 div.execution_id
 {
@@ -63,7 +65,8 @@ div.execution_id
 }
 div.execution_description
 {
-	display: inline;
+	display: inline-block;
+	word-wrap: break-word;
 
 }
 
@@ -135,10 +138,13 @@ div.metadata div.environment, div.metadata div.host, div.metadata div.start_time
 .source {
 	display: block;
 	float: right;
+	width: 200;
+	word-wrap: break-word;
 }
 
 .message {
-	width: 400px;
+	width: 500px;
+	word-wrap: break-word;
 
 }
 

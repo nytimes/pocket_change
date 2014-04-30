@@ -52,14 +52,15 @@ div.cycle div.cycle_id {
 div.cycle div.name {
 	font-size: 18px;
 	font-weight:bold;
-	text-transform: uppercase;
-	display: inline;
+	display: inline-block;
+	word-wrap: break-word;
 }
 
 div.cycle div.description {
 	font-size: 18px;
 	font-style: italic;
-	display: inline;
+	display: inline-block;
+	word-wrap: break-word;
 }
 
 .spacer {
@@ -142,8 +143,13 @@ li .execution{
 	top: -47px;
 	position: relative;
 	padding: 5px 10px;
+	word-wrap: break-word;
 }
 
+.execution .description{
+	width:500;
+	display: inline-block;
+}
 
 li.case div.header
 {
@@ -159,7 +165,9 @@ li.case div.header
 li.case div.header div.label
 {
 	font-weight:bold;
-	display: inline;
+	display: inline-block;
+	width:850;
+	word-wrap: break-word;
 }
 li.case div.header div.jira_summary
 {
