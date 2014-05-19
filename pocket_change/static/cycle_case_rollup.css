@@ -220,7 +220,7 @@ li.case div.header div.jira_summary
 	height: 100px;
 }
 
-.filter_list li[active=n]
+.filter_list li[active=y]
 {
 	background-color:red;
 }

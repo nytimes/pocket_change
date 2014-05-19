@@ -1,126 +1,201 @@
-function FilterListener(caseNode) {
-	this.caseNode = caseNode;
-	this.listenerMap = {};
-	this.listenerNames = [];
-	this.getFire = function(trackName) {
-		if (trackName in this.listenerMap) { return this.listenerMap[trackName]; }
-		else {
-			var self = this;
-			this.listenerNames.push(trackName);
-			var fire = function() {
-				var filtered = 'n';
-				var set = (self.caseNode.getAttribute(trackName) == 'y' ? 'n' : 'y');
-				self.caseNode.setAttribute(trackName, set);
-				for (var i = 0; i < self.listenerNames.length; i++) {
-					if (self.caseNode.getAttribute(self.listenerNames[i]) == 'y') {
-						filtered = 'y';
-					};
-				}; 
-				self.caseNode.setAttribute('filtered', filtered);
-			};
-			this.listenerMap[trackName] = fire;
-			return fire;
+function isEmpty(obj) {
+	for (var name in obj) {
+		if (obj.hasOwnProperty(name)) {
+			return false;
+		};
+	};
+	return true;
+};
+
+function nextSiblingNode(node) {
+	var next = node.nextSibling;
+	while (next !== null && next.nodeType != 1) {
+		next = next.nextSibling;
+	};
+	return next;
+};
+
+function allFilterActive(conditionMap) {
+	for (var condition in conditionMap) {
+		if (!conditionMap[condition].state) {
+			return false;
+		};
+	};
+	return true;
+};
+
+function anyFilterActive(conditionMap) {
+	for (var condition in conditionMap) {
+		if (conditionMap[condition].state) {
+			return true;
+		};
+	};
+	return false;
+};
+
+function Filter(name, filterActive) {
+	this.name = name;
+	if (typeof filterActive == 'undefined' || filterActive == 'all') {
+		this.filterActive = allFilterActive;
+	} else if (filterActive == 'any') {
+		this.filterActive = anyFilterActive;
+	} else {
+		this.filterActive = filterActive;
+	};
+	this.state = false;
+	this.conditionMap = {};
+	this.filters = [];
+	this.addFilter = function(filter) {
+		this.filters.push(filter);
+	};
+	this.addCondition = function(condition) {
+		this.conditionMap[condition.name] = condition;
+		condition.addFilter(this);
+	};
+	this.update = function() {
+		this.state = this.filterActive(this.conditionMap);
+		for (var i = 0; i < this.filters.length; i++) {
+			this.filters[i].update();
 		};
 	};
 };
-function FilterListenerStore() {
-	this.caseNodeListeners = [];
-	this.getListener = function(caseNode, trackName) {
-		var listener = 0;
-		for (var i = 0; i < this.caseNodeListeners.length; i++) {
-			if (this.caseNodeListeners[i].caseNode == caseNode) {
-				listener = this.caseNodeListeners[i];
-			};
-		};
-		if (listener == 0) {
-			listener = new FilterListener(caseNode);
-			this.caseNodeListeners.push(listener);
-		};
-		return listener.getFire(trackName);
+
+function FilterableNode(domElement, filter) {
+	this.domElement = domElement;
+	this.filter = filter;
+	this.update = function() {
+		this.domElement.setAttribute('filtered', this.filter.state ? 'y' : 'n');
+	};
+	filter.addFilter(this);
+	this.addCondition = function(condition) {
+		this.filter.addCondition(condition);
 	};
 };
-var filterListeners = new FilterListenerStore();
-function initFilterGroup(filterName, statusLocator, label, getCaseFromStatus) {
-	var statusNodes = document.querySelectorAll(statusLocator);
-	if (statusNodes.length > 0) {
-		var statusFilterNodes = {};
-		var statusKeys = [];
-		// Lists of case nodes for which listeners are attached by status key
-		var statusKeyCaseNodeMap = {};
-		for (var i = 0; i < statusNodes.length; i++) {
-			var key = statusNodes[i].textContent.trim();
-			var caseNode = getCaseFromStatus(statusNodes[i]);
-			var filterNode;
-			if (key in statusFilterNodes) { filterNode = statusFilterNodes[key]; }
-			else {
-				filterNode = document.createElement('li');
-				filterNode.setAttribute('active', 'y');
-				filterNode.addEventListener('click',
-							function() {
-								set = (this.getAttribute('active') == 'n' ? 'y' : 'n');
-								this.setAttribute('active', set);
-							},
-							false);
-				filterNode.appendChild(document.createTextNode(key));
-				statusKeys.push(key);
-				statusFilterNodes[key] = filterNode; 
-				filterNode.className = statusNodes[i].className + '_' + filterName;
-			};
-			var alreadyListening = false;
-			if (key in statusKeyCaseNodeMap) {
-				for (var j = 0; j < statusKeyCaseNodeMap[key].length; j++) {
-					if (statusKeyCaseNodeMap[key][j] == caseNode) {
-						alreadyListening = true;
-					};
-				};
-			} else { statusKeyCaseNodeMap[key] = []; };
-			if (!alreadyListening) {
-				filterNode.addEventListener('click',
-										filterListeners.getListener(caseNode,
-																filterName),
-										false);
-				statusKeyCaseNodeMap[key].push(caseNode);
-			};
+
+function Condition(name, domElement) {
+	this.name = name;
+	domElement.setAttribute('active', 'n');
+	this.domElement = domElement;
+	this.state = false;
+	this.filters = [];
+	var self = this;
+	this.toggle = function() {
+		self.state = self.state ? false : true;
+		self.domElement.setAttribute('active', self.state ? 'y' : 'n');
+		for (var i = 0; i < self.filters.length; i++) {
+			self.filters[i].update();
 		};
-		statusKeys.sort();
-		var statusFiltersContainer = document.createElement('div');
-		statusFiltersContainer.className = filterName;
-		var labelContainer = document.createElement('div');
-		labelContainer.className = 'label';
-		labelContainer.appendChild(document.createTextNode(label));
-		statusFiltersContainer.appendChild(labelContainer);
-		var statusFilters = document.createElement('ul');
-		statusFilters.className = 'filter_list';
-		statusFiltersContainer.appendChild(statusFilters);
-		for (var i = 0; i < statusKeys.length; i++) {
-			filterNode = statusFilterNodes[statusKeys[i]];
-			filterNode.setAttribute('column', i % 4);
-			filterNode.setAttribute('row', Math.floor(i / 4));
-			statusFilters.appendChild(statusFilterNodes[statusKeys[i]]);
-		};
-		caseFiltersNode = document.querySelector('div.case_filters');
-		if (caseFiltersNode.childNodes.length == 0) {
-			spacer = document.createElement('div');
-			spacer.className = 'spacer';
-			caseFiltersNode.appendChild(spacer);
-		}
-		document.querySelector('div.case_filters').appendChild(statusFiltersContainer);
-		spacer = document.createElement('div');
-		spacer.className = 'spacer';
-		caseFiltersNode.appendChild(spacer);
+	};
+	domElement.addEventListener('click', this.toggle, false);
+	this.addFilter = function(filter) {
+		this.filters.push(filter);
 	};
 };
-function initFilters() {
-	initFilterGroup('jira_status_filter',
-					'li.case div.jira_summary div',
-					'Show:',
-					function(statusNode) {
-						return statusNode.parentNode.parentNode.parentNode;
-					});
-	initFilterGroup('execution_result_filter',
-					'li.execution div.result div',
-					'Show with:',
-					function(statusNode) {
-						return statusNode.parentNode.parentNode.parentNode.parentNode;
-					});
+
+function ConditionGroup(name, label) {
+	this.name = name;
+	this.label = label;
+	this.conditionMap = {};
+	this.rowWidth = 4;
+	this.initContainer = function() {
+		if (!('domConditionContainer' in this)) {
+			this.domConditionContainer = document.createElement('div');
+			this.domConditionContainer.className = this.name;
+			var domConditionGroupLabel = document.createElement('div');
+			domConditionGroupLabel.className = 'label';
+			domConditionGroupLabel.appendChild(document.createTextNode(this.label));
+			this.domConditionContainer.appendChild(domConditionGroupLabel);
+			this.domConditionList = document.createElement('ul');
+			this.domConditionList.className = 'filter_list';
+			this.domConditionContainer.appendChild(this.domConditionList);
+		};
+	};
+	this.getCondition = function(conditionName) {
+		if (conditionName in this.conditionMap) {
+			return this.conditionMap[conditionName];
+		} else {
+			var condition = document.createElement('li');
+			condition.appendChild(document.createTextNode(conditionName));
+			condition = new Condition(conditionName, condition);
+			this.conditionMap[conditionName] = condition;
+			return condition;
+		};
+	};
+	this.buildList = function() {
+		this.initContainer();
+		var names = [];
+		for (var name in this.conditionMap) {
+			if (this.conditionMap.hasOwnProperty(name)) {
+				names.push(name);
+			};
+		};
+		names.sort();
+		for (var i = 0; i < names.length; i++) {
+			this.domConditionList.appendChild(this.conditionMap[names[i]].domElement);
+		};
+		this.setRowWidth();
+	};
+	this.setRowWidth = function(rowWidth) {
+		if (typeof rowWidth !== 'undefined') {
+			this.rowWidth = rowWidth;
+		} else {
+			rowWidth = this.rowWidth;
+		};
+		if ('domConditionList' in this) {
+			var index = 0;
+			var domConditions = this.domConditionList.childNodes;
+			for (var i = 0; i < domConditions.length; i++) {
+				var domCondition = domConditions[i];
+				domCondition.setAttribute('row', Math.floor(i / rowWidth));
+				domCondition.setAttribute('column', i % rowWidth);
+			};
+		};
+	};
+};
+
+function appendSpacerDiv(domElement) {
+	var spacer = document.createElement('div');
+	spacer.className = 'spacer';
+	domElement.appendChild(spacer);
+};
+
+function initRollupFilters() {
+	var executionStatusConditionGroup = new ConditionGroup('execution_result_filter',
+														   'Show with:');
+	var jiraStatusConditionGroup = new ConditionGroup('jira_status_filter',
+													  'Show:');
+
+	var domCase = document.querySelector('li.case');
+	while (domCase !== null) {
+		var caseId = domCase.querySelector('div.case_id').textContent.trim();
+		var node = new FilterableNode(domCase, new Filter(caseId, 'any'));
+		var executionStatusFilter = new Filter('executionStatus');
+		node.addCondition(executionStatusFilter);
+		var domExecution = domCase.querySelector('li.execution');
+		while (domExecution !== null) {
+			var status = domExecution.querySelector('div.result_status div').textContent.trim();
+			var condition = executionStatusConditionGroup.getCondition(status);
+			executionStatusFilter.addCondition(condition);
+			domExecution = nextSiblingNode(domExecution);
+		};
+		var domJiraStatus = domCase.querySelector('div.jira_summary');
+		if (domJiraStatus !== null) {
+			var status = domJiraStatus.textContent.trim();
+			var condition = jiraStatusConditionGroup.getCondition(status);
+			node.addCondition(condition);
+		};
+		domCase = nextSiblingNode(domCase);
+	};
+	var domCaseFilters = document.querySelector('div.case_filters');
+	appendSpacerDiv(domCaseFilters);
+	if (!isEmpty(jiraStatusConditionGroup.conditionMap)) {
+		jiraStatusConditionGroup.buildList();
+		domCaseFilters.appendChild(jiraStatusConditionGroup.domConditionContainer);
+		appendSpacerDiv(domCaseFilters);
+	};
+	if (!isEmpty(executionStatusConditionGroup.conditionMap)) {
+		executionStatusConditionGroup.buildList();
+		domCaseFilters.appendChild(executionStatusConditionGroup.domConditionContainer);
+		appendSpacerDiv(domCaseFilters);
+	};
 };
