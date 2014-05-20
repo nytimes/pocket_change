@@ -151,6 +151,22 @@ function ConditionGroup(name, label) {
 			};
 		};
 	};
+	this.isEmpty = function() {
+		return isEmpty(this.conditionMap);
+	};
+	this.appendTo = function(domElement, withSpacer, appendIfEmpty) {
+		withSpacer = typeof withSpacer !== 'undefined' ? withSpacer : false;
+		appendIfEmpty = typeof appendIfEmpty !== 'undefined' ? appendIfEmpty : true;
+		if (appendIfEmpty || !this.isEmpty()) {
+			if (!('domConditionList' in this)) {
+				this.buildList();
+			};
+			domElement.appendChild(this.domConditionContainer);
+			if (withSpacer) {
+				appendSpacerDiv(domElement);
+			};
+		};
+	};
 };
 
 function appendSpacerDiv(domElement) {
@@ -188,14 +204,61 @@ function initRollupFilters() {
 	};
 	var domCaseFilters = document.querySelector('div.case_filters');
 	appendSpacerDiv(domCaseFilters);
-	if (!isEmpty(jiraStatusConditionGroup.conditionMap)) {
-		jiraStatusConditionGroup.buildList();
-		domCaseFilters.appendChild(jiraStatusConditionGroup.domConditionContainer);
-		appendSpacerDiv(domCaseFilters);
+	jiraStatusConditionGroup.appendTo(domCaseFilters, true, false);
+	executionStatusConditionGroup.appendTo(domCaseFilters, true, false);
+};
+
+function buildSourceConditionName(sourceTokens, rootI, sliceEnd) {
+	
+	if (rootI === 0) {
+		var root = sourceTokens[rootI];
+	} else {
+		var root = '.' + sourceTokens[rootI];
 	};
-	if (!isEmpty(executionStatusConditionGroup.conditionMap)) {
-		executionStatusConditionGroup.buildList();
-		domCaseFilters.appendChild(executionStatusConditionGroup.domConditionContainer);
-		appendSpacerDiv(domCaseFilters);
+	if (rootI === sourceTokens.length - 1) {
+		return root;
+	} else {
+		conditionName = root + '.';
+		for (var i = rootI + 1; i < sliceEnd; i++) {
+			conditionName += sourceTokens[i];
+			if (i < sourceTokens.length - 1) {
+				conditionName += '.';
+			};
+		};
 	};
+	return conditionName;
+};
+
+function initDetailsFilters() {
+	var messageSourceConditionGroup = new ConditionGroup('message_source_filter',
+														 'Show sources:');
+	var messageLevelConditionGroup = new ConditionGroup('message_level_filter',
+														"Show levels:");
+	var domLog = document.querySelector('li.log');
+	var logIndex = 0;
+	while (domLog !== null) {
+		var node = new FilterableNode(domLog, new Filter(logIndex, 'any'));
+		var sourceFilter = new Filter('logSource', 'any');
+		node.addCondition(sourceFilter);
+		var source = domLog.querySelector('div.source').textContent.trim();
+		var sourceTokens = source.split(".");
+		console.log(sourceTokens);
+		for (var rootI = 0; rootI < sourceTokens.length; rootI++) {
+			for (var endI = rootI + 1; endI <= sourceTokens.length; endI++) {
+				var conditionName = buildSourceConditionName(sourceTokens, rootI, endI);
+				console.log(conditionName);
+				var condition = messageSourceConditionGroup.getCondition(conditionName);
+				sourceFilter.addCondition(condition);
+			};
+		};
+		var level = domLog.querySelector('div.level').textContent.trim();
+		var condition = messageLevelConditionGroup.getCondition(level);
+		node.addCondition(condition);
+		domLog = nextSiblingNode(domLog);
+		logIndex++;
+	};
+	var domLogFilters = document.querySelector('div.log_filters');
+	appendSpacerDiv(domLogFilters);
+	messageSourceConditionGroup.appendTo(domLogFilters, true, false);
+	messageLevelConditionGroup.appendTo(domLogFilters, true, false);
 };

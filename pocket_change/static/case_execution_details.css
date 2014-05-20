@@ -172,3 +172,58 @@ ul .cycle_links {
 {
 	color:orange;
 }
+
+.logs li.log[filtered=y]
+{
+	display:none;
+}
+
+div.log_filters
+{
+	background-color:#fff;
+}
+
+.filter_list {
+	display: inline;
+}
+
+.label {
+	display: inline;
+}
+
+
+div.log_filters div div.label
+{
+
+}
+div.log_filters ul.filter_list
+{
+
+}
+ul.filter_list li
+{
+	width:100;
+	height:30;
+	padding:4;
+	text-align:center;
+	display: inline-block;
+	margin: 0px 10px;
+	color: #fff;
+	font-weight: 400;
+}
+
+.filter_list {
+	background-color: #fff;
+}
+
+.filter_list li {
+	display: inline;
+	background-color:green;
+	padding: 10px;
+	height: 100px;
+}
+
+.filter_list li[active=y]
+{
+	background-color:red;
+}

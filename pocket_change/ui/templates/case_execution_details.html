@@ -2,6 +2,7 @@
 <head>
 	<title>Pocket Change - Case Execution Details</title>
 	<link rel=stylesheet media=screen href='{{ url_for('core_ui.static', filename='case_execution_details.css') }}'>
+	<script type='text/javascript' src='{{ url_for('core_ui.static', filename='filters.js') }}'></script>
 </head>
 <body>
 	<div class=execution_details>
@@ -21,6 +22,7 @@
 				{%- endfor %}
 			</div>
 		</div>
+		<div class=log_filters></div>
 		<ul class=logs>
 			{%- for log in case_execution.log_messages %}
 				<li class=log>
@@ -40,5 +42,6 @@
 			{%- endfor %}
 		</ul>
 	</div>
+	<script type='text/javascript'>initDetailsFilters()</script>
 </body>
 </html>
