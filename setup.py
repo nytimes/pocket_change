@@ -23,4 +23,5 @@ setup(name='pocket-change',
                         'Flask-RESTful',
                         'Flask-SQLAlchemy',
                         'passlib',
-                        'flask-login'])
+                        'flask-login',
+                        'py-bcrypt'])

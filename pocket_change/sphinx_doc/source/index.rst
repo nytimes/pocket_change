@@ -17,7 +17,7 @@ you all the dependencies, though you'll probably also want pocket.  For that:
 `pip install sneeze-pocket`.
 
 After installation, you must create a config file.  It should be formatted
-like a Flask config file (KEY = VALUE) and contain the following values:
+like a Flask config file (KEY = 'VALUE') and contain the following values:
 
 * ``SQLALCHEMY_DATABASE_URI`` - A `SQLAlchemy formatted
   <http://docs.sqlalchemy.org/en/rel_0_8/core/engines.html#database-urls>`_
