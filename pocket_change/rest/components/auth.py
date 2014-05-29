@@ -18,7 +18,7 @@ class Token(Resource):
         app_key = request.args.get('app_key', None)
         if not (username and (password or token) and app_key):
             return {'message' : 'Missing username, password, token, and/or app_key.'}, 400
-        if app_key != current_app.config['JIRA_APP_KEY']:
+        if app_key != current_app.config['APP_KEY']:
             return {'message' : 'Incorrect app_key.'}, 400
         user = None
         if token:

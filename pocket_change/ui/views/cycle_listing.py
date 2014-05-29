@@ -3,6 +3,8 @@ from pocket_change import sqlalchemy_db
 from flask import current_app, request, render_template, url_for, g
 from flask.ext.login import current_user
 from sqlalchemy import or_
+from pocket_change.ui.forms import LoginForm
+from flask.ext.login import logout_user
 
 
 @core.route('/test_cycle_list/', methods=['POST', 'GET'])
@@ -14,8 +16,18 @@ def cycle_listing(filter=None, offset=1):
     TestCycle = sqlalchemy_db.models['TestCycle']
     query = sqlalchemy_db.create_scoped_session().query(TestCycle)
     if request.method == 'POST':
-        filter = request.form.get('filter', None)
-        offset = 1
+        if 'submit_filter' in request.form:
+            filter = request.form.get('filter', None)
+            offset = 1
+            header_login_form = LoginForm(prefix="header_login")
+        elif 'header_login-submit' in request.form:
+            header_login_form = LoginForm(request.form, prefix="header_login")
+            user = header_login_form.authed_user()
+        elif 'header_logout-submit' in request.form:
+            logout_user()
+            header_login_form = LoginForm(prefix="header_login")
+    else:
+        header_login_form = LoginForm(prefix="header_login")
     if filter:
         query = query.filter(or_(TestCycle.name.contains(filter),
                                  TestCycle.description.contains(filter)))
@@ -47,4 +59,5 @@ def cycle_listing(filter=None, offset=1):
                            has_next=has_next,
                            use_jira=use_jira,
                            jira_host=current_app.config.get('JIRA_HOST', ''),
-                           cycle_issues=cycle_issues)
+                           cycle_issues=cycle_issues,
+                           header_login_form=header_login_form)

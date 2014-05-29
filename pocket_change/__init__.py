@@ -55,6 +55,12 @@ sqlalchemy_db.make(app, *model_adders)
 
 from pocket_change.auth import login_manager
 login_manager.init_app(app)
+# Create default user if no users exist
+User = sqlalchemy_db.models['User']
+if not User.query.count():
+    default_user = User(name='admin', password='password')
+    sqlalchemy_db.session.add(default_user)
+    sqlalchemy_db.session.commit()
 
 #### REST ####
 

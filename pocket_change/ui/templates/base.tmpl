@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+    <head>
+        {% block head %}
+            <title>{{ '{PC}' }} {% block title %}{% endblock %}</title>
+            <link rel=stylesheet media=screen href='{{ url_for('core_ui.static', filename='base.css') }}'>
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+        <div class=header>
+            {% if current_user and current_user.is_authenticated() %}
+                <div class=current_user_status>
+                    <div class=label>Logged in as:</div>
+                    <div class=name>{{ current_user.name }}</div>
+                    <form name="header_logout" method="post">
+                        <input type="submit" name="header_logout-submit" value="Logout"/>
+                    </form>
+                </div>
+            {% else %}
+                <form name="header_login" method="post">
+                    {% for field in header_login_form %}
+                        <div class={{ field.name }}>
+                            <label for={{ field.name }}>{{ field.label }}</label>
+                            {{ field() }}
+                        </div>
+                    {% endfor %}
+                </form>
+            {% endif %}
+        </div>
+        {% endblock %}
+    </body>
+</html>

@@ -1,9 +1,11 @@
-<html>
-<head>
-	<title>Pocket Change - Cycle Listing</title>
+{% extends "base.tmpl" %}
+{%block title %}Cycle Listing{% endblock %}
+{% block head %}
+{{ super() }}
 	<link rel=stylesheet media=screen href='{{ url_for('core_ui.static', filename='cycle_listing.css') }}'>
-</head>
-<body>
+{% endblock %}
+{% block body %}
+{{ super() }}
 	<div class=cycle_listing>
 		<div class=filter_box>
 			{%- if filter %}
@@ -12,7 +14,7 @@
 			{%- endif %}
 			<form name="filter" method="post">
 				<input type="text" name="filter">
-				<input type="submit" value="Get Matching Cycles">
+				<input type="submit" name='submit_filter' value="Get Matching Cycles">
 			</form>
 		</div>
 		<ul class=listing>
@@ -38,5 +40,4 @@
 			{% endif %}
 		</div>
 	</div>
-</body>
-</html>
+{% endblock %}

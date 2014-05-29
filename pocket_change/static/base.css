@@ -1,0 +1,72 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video
+{
+    margin: 0px auto;
+    border: 0;
+    background-color:#ededed;
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 18px;
+    font-weight: 200;
+}
+
+div.header_login-name
+{   
+    position:absolute;
+    top:-5px;
+    left:225px;
+}
+
+div.header_login-password
+{   
+    position:absolute;
+    top:-5px;
+    left:500px;
+}
+
+div.header_login-submit
+{   
+    position:absolute;
+    top:-5px;
+    left:825px;
+}
+
+label[for=header_login-submit]
+{
+    display:none;
+}
+
+div.current_user_status div.label
+{
+    position:absolute;
+    top:0px;
+    left:225px;
+}
+
+div.current_user_status div.name
+{
+    position:absolute;
+    font-weight: bold;
+    top:0px;
+    left:400px;
+}
+
+div.current_user_status input
+{
+    position:absolute;
+    top:10px;
+    left:600px;
+}

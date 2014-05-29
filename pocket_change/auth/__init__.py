@@ -11,14 +11,16 @@ class PocketChangeUser(object):
     
     authenticators = []
     
-    def __init__(self, db_entity, name=None, password=None, populate_name_from_database=False):
+    def __init__(self, db_entity, token_ttl, name=None, password=None,
+                 populate_name_from_database=False):
         
+        self.token_ttl = token_ttl
         if db_entity:
             self.session = sqlalchemy_db.create_scoped_session()
             db_entity = self.session.merge(db_entity)
         try:
             self.token = db_entity.get_new_token(current_app.secret_key[:16],
-                                                 expires=login_timeout)
+                                                 expires=token_ttl)
         except AttributeError:
             self.token = db_entity
         else:
@@ -32,7 +34,7 @@ class PocketChangeUser(object):
     
     def refresh(self, force=False):
         
-        if force or datetime.now() > self.last_refresh + user_data_timeout:
+        if force or datetime.now() > self.last_refresh + self.token_ttl:
             self.session = sqlalchemy_db.create_scoped_session()
             self.token = self.session.merge(self.token)
             self.last_refresh = datetime.now()
@@ -88,6 +90,10 @@ class PocketChangeUser(object):
         
         self.name = self.user.name
 
+
+from pocket_change.auth.settings import authentication_settings, Authed
+
+
 @PocketChangeUser.authenticator
 def token_auth(user):
     
@@ -113,7 +119,7 @@ def get_user_from_token(token, username=None):
         return None
     if username is None:
         username = session.get('username', '')
-    return PocketChangeUser(token, username)
+    return PocketChangeUser(token, authentication_settings.browser_token_ttl, username)
 
 @login_manager.token_loader
 def load_user_from_token(token):
